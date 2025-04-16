@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -18,41 +19,37 @@ namespace LINQtoDataSetApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Инициализация таблицы (в реальном приложении здесь будет загрузка из БД)
-            InitializeSampleData();
+            try
+            {
+                string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=EmployeesDB.accdb;";
+                OleDbConnection connection = new OleDbConnection(connectionString);
 
-            // Привязка основного DataGridView
-            dataGridView1.DataSource = employeesTable;
+                OleDbDataAdapter adapter = new OleDbDataAdapter("SELECT * FROM Сотрудники", connection);
+                DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet, "Сотрудники");
 
-            // Заполнение ListBox должностями
-            var positions = employeesTable.AsEnumerable()
-                .Select(row => row.Field<string>("Должность"))
-                .Distinct()
-                .ToList();
-            listBoxPositions.DataSource = positions;
-        }
+                employeesTable = dataSet.Tables["Сотрудники"];
+                dataGridView1.DataSource = employeesTable;
 
-        private void InitializeSampleData()
-        {
-            employeesTable = new DataTable("Сотрудники");
+                // Заполнение ListBox должностями
+                var positions = employeesTable.AsEnumerable()
+                    .Select(row => row.Field<string>("Должность"))
+                    .Distinct()
+                    .ToList();
+                listBoxPositions.DataSource = positions;
 
-            // Создание колонок
-            employeesTable.Columns.Add("Код", typeof(int));
-            employeesTable.Columns.Add("Имя", typeof(string));
-            employeesTable.Columns.Add("Фамилия", typeof(string));
-            employeesTable.Columns.Add("Должность", typeof(string));
-            employeesTable.Columns.Add("ДатаРождения", typeof(DateTime));
-            employeesTable.Columns.Add("Оклад", typeof(decimal));
-
-            // Добавление тестовых данных
-            employeesTable.Rows.Add(1, "Иван", "Иванов", "Менеджер", new DateTime(1980, 5, 15), 50000);
-            employeesTable.Rows.Add(2, "Петр", "Петров", "Разработчик", new DateTime(1990, 8, 22), 75000);
-            employeesTable.Rows.Add(3, "Сергей", "Сергеев", "Разработчик", new DateTime(1995, 3, 10), 80000);
-            employeesTable.Rows.Add(4, "Анна", "Смирнова", "Дизайнер", new DateTime(1985, 11, 5), 60000);
-            employeesTable.Rows.Add(5, "Мария", "Кузнецова", "Менеджер", new DateTime(1975, 7, 30), 55000);
-            employeesTable.Rows.Add(6, "Алексей", "Васильев", "Тестировщик", new DateTime(1992, 9, 18), 45000);
-            employeesTable.Rows.Add(7, "Дмитрий", "Попов", "Разработчик", new DateTime(1988, 12, 3), 85000);
-            employeesTable.Rows.Add(8, "Елена", "Новикова", "Дизайнер", new DateTime(1993, 4, 25), 65000);
+                // Настройка столбцов для dataGridView2
+                dataGridView2.Columns.Add("Column1", "Фамилия");
+                dataGridView2.Columns.Add("Column2", "Имя");
+                dataGridView2.Columns.Add("Column3", "Должность");
+                dataGridView2.Columns.Add("Column4", "Дата рождения");
+                dataGridView2.Columns.Add("Column5", "Оклад");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void DisplayQueryResult(IEnumerable<DataRow> query)
@@ -62,7 +59,6 @@ namespace LINQtoDataSetApp
             foreach (DataRow row in query)
             {
                 dataGridView2.Rows.Add(
-                    row.Field<int>("Код"),
                     row.Field<string>("Фамилия"),
                     row.Field<string>("Имя"),
                     row.Field<string>("Должность"),
@@ -72,13 +68,13 @@ namespace LINQtoDataSetApp
             }
         }
 
-        // Обработчики кнопок для различных запросов
         private void btnAvgSalary_Click(object sender, EventArgs e)
         {
             decimal avgSalary = employeesTable.AsEnumerable()
                 .Average(row => row.Field<decimal>("Оклад"));
 
-            MessageBox.Show($"Средний оклад по компании: {avgSalary:F2}", "Результат");
+            MessageBox.Show($"Средний оклад по компании: {avgSalary:F2} руб.", "Результат",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnFindByName_Click(object sender, EventArgs e)
@@ -86,7 +82,8 @@ namespace LINQtoDataSetApp
             string name = txtName.Text.Trim();
             if (string.IsNullOrEmpty(name))
             {
-                MessageBox.Show("Введите имя сотрудника", "Ошибка");
+                MessageBox.Show("Введите имя сотрудника", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -100,7 +97,8 @@ namespace LINQtoDataSetApp
         {
             if (listBoxPositions.SelectedItem == null)
             {
-                MessageBox.Show("Выберите должность", "Ошибка");
+                MessageBox.Show("Выберите должность", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -114,8 +112,8 @@ namespace LINQtoDataSetApp
         private void btnPensionAge_Click(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
-            DateTime pensionDateMen = now.AddYears(-65); // Пенсионный возраст для мужчин
-            DateTime pensionDateWomen = now.AddYears(-60); // Пенсионный возраст для женщин
+            DateTime pensionDateMen = now.AddYears(-65);
+            DateTime pensionDateWomen = now.AddYears(-60);
 
             var query = employeesTable.AsEnumerable()
                 .Where(row => row.Field<DateTime>("ДатаРождения") <= pensionDateMen ||
@@ -139,7 +137,8 @@ namespace LINQtoDataSetApp
         {
             if (listBoxPositions.SelectedItem == null)
             {
-                MessageBox.Show("Выберите должность", "Ошибка");
+                MessageBox.Show("Выберите должность", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -178,12 +177,11 @@ namespace LINQtoDataSetApp
 
             foreach (var group in query)
             {
-                dataGridView2.Rows.Add($"Должность: {group.Key}", "", "", "", "", "");
+                dataGridView2.Rows.Add($"Должность: {group.Key}", "", "", "", "");
 
                 foreach (var row in group)
                 {
                     dataGridView2.Rows.Add(
-                        row.Field<int>("Код"),
                         row.Field<string>("Фамилия"),
                         row.Field<string>("Имя"),
                         row.Field<string>("Должность"),
@@ -191,6 +189,7 @@ namespace LINQtoDataSetApp
                         row.Field<decimal>("Оклад")
                     );
                 }
+                dataGridView2.Rows.Add("", "", "", "", ""); // Пустая строка между группами
             }
         }
 
@@ -209,8 +208,8 @@ namespace LINQtoDataSetApp
             {
                 dataGridView2.Rows.Add(
                     item.Position,
-                    $"Средний оклад: {item.AvgSalary:F2}",
-                    "", "", "", ""
+                    $"Средний оклад: {item.AvgSalary:F2} руб.",
+                    "", "", ""
                 );
             }
         }
@@ -225,10 +224,14 @@ namespace LINQtoDataSetApp
                 });
 
             dataGridView2.Rows.Clear();
+            dataGridView2.Columns.Clear();
+
+            dataGridView2.Columns.Add("Column1", "ФИО");
+            dataGridView2.Columns.Add("Column2", "Оклад");
 
             foreach (var item in query)
             {
-                dataGridView2.Rows.Add(item.FullName, item.Salary, "", "", "", "");
+                dataGridView2.Rows.Add(item.FullName, item.Salary);
             }
         }
     }
