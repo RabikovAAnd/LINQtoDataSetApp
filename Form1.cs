@@ -19,6 +19,8 @@ namespace LINQtoDataSetApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // TODO: данная строка кода позволяет загрузить данные в таблицу "database3DataSet1.Работники". При необходимости она может быть перемещена или удалена.
+            this.работникиTableAdapter.Fill(this.database3DataSet1.Работники);
             try
             {
                 string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=EmployeesDB.accdb;";

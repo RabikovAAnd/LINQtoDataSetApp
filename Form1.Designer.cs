@@ -17,8 +17,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.database3DataSetBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.database3DataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.database3DataSet = new LINQtoDataSetApp.Database3DataSet();
+            this.database3DataSetBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -41,16 +42,20 @@
             this.btnSortByLastName = new System.Windows.Forms.Button();
             this.работникиBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSetLINQ = new LINQtoDataSetApp.DataSetLINQ();
-            this.database3DataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.database3DataSet1 = new LINQtoDataSetApp.Database3DataSet1();
+            this.работникиBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.работникиTableAdapter = new LINQtoDataSetApp.Database3DataSet1TableAdapters.РаботникиTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.database3DataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.работникиBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetLINQ)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSet1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.работникиBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -59,7 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.DataSource = this.database3DataSetBindingSource;
+            this.dataGridView1.DataSource = this.database3DataSetBindingSource1;
             this.dataGridView1.Location = new System.Drawing.Point(16, 44);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
@@ -67,15 +72,20 @@
             this.dataGridView1.Size = new System.Drawing.Size(800, 246);
             this.dataGridView1.TabIndex = 0;
             // 
-            // database3DataSetBindingSource1
+            // database3DataSetBindingSource
             // 
-            this.database3DataSetBindingSource1.DataSource = this.database3DataSet;
-            this.database3DataSetBindingSource1.Position = 0;
+            this.database3DataSetBindingSource.DataSource = this.database3DataSet;
+            this.database3DataSetBindingSource.Position = 0;
             // 
             // database3DataSet
             // 
             this.database3DataSet.DataSetName = "Database3DataSet";
             this.database3DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // database3DataSetBindingSource1
+            // 
+            this.database3DataSetBindingSource1.DataSource = this.database3DataSet;
+            this.database3DataSetBindingSource1.Position = 0;
             // 
             // dataGridView2
             // 
@@ -321,10 +331,19 @@
             this.dataSetLINQ.DataSetName = "DataSetLINQ";
             this.dataSetLINQ.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // database3DataSetBindingSource
+            // database3DataSet1
             // 
-            this.database3DataSetBindingSource.DataSource = this.database3DataSet;
-            this.database3DataSetBindingSource.Position = 0;
+            this.database3DataSet1.DataSetName = "Database3DataSet1";
+            this.database3DataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // работникиBindingSource1
+            // 
+            this.работникиBindingSource1.DataMember = "Работники";
+            this.работникиBindingSource1.DataSource = this.database3DataSet1;
+            // 
+            // работникиTableAdapter
+            // 
+            this.работникиTableAdapter.ClearBeforeFill = true;
             // 
             // Form1
             // 
@@ -344,15 +363,17 @@
             this.Text = "LINQ to DataSet - Анализ сотрудников";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.database3DataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.работникиBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetLINQ)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.database3DataSetBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.database3DataSet1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.работникиBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -384,5 +405,8 @@
         private System.Windows.Forms.BindingSource database3DataSetBindingSource;
         private Database3DataSet database3DataSet;
         private System.Windows.Forms.BindingSource database3DataSetBindingSource1;
+        private Database3DataSet1 database3DataSet1;
+        private System.Windows.Forms.BindingSource работникиBindingSource1;
+        private Database3DataSet1TableAdapters.РаботникиTableAdapter работникиTableAdapter;
     }
 }

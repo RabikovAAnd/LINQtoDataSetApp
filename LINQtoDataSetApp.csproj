@@ -71,6 +71,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Database3DataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Database3DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Database3DataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="DataSetLINQ.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,6 +111,17 @@
     </None>
     <None Include="Database3DataSet.xss">
       <DependentUpon>Database3DataSet.xsd</DependentUpon>
+    </None>
+    <None Include="Database3DataSet1.xsc">
+      <DependentUpon>Database3DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="Database3DataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Database3DataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Database3DataSet1.xss">
+      <DependentUpon>Database3DataSet1.xsd</DependentUpon>
     </None>
     <None Include="DataSetLINQ.xsc">
       <DependentUpon>DataSetLINQ.xsd</DependentUpon>
